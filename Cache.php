@@ -274,7 +274,7 @@ class CacheElement{
 
 
 // Example.
-/* $cache = new SmartCache();
+/*$cache = new SmartCache();
 
 $cache->setMaximumCharactersCount(15);
 
@@ -286,4 +286,5 @@ var_dump($cache->get('A'));     // Will return 1234567890
 $cache->put('D', '567');        // 4 + 10 + 1 + 3= 18 chars > 16, an elements must be deleted
 // Because A was used more recently then B, A will not be removed.
 var_dump($cache->get('B'));     // Will return null
-var_dump($cache->get('A'));     // Will return 1234567890 */
+var_dump($cache->get('A'));     // Will return 1234567890
+*/
