@@ -20,8 +20,8 @@ class SmartCache implements ISmartCache{
 
     private $cache;
 
-    private $cacheHead;
-    private $cacheTail;
+    public $cacheHead;
+    public $cacheTail;
 
     /**
      * SmartCache constructor. Init doubly linked list to store cache, links head and tail
@@ -132,6 +132,12 @@ class SmartCache implements ISmartCache{
         $this->excludeElement($element);
         $this->upElement($element);
 
+        $newLength = strlen($value);
+
+        while($this->availableSize + $element->getLength() < $newLength){
+            $this->freeSpace();
+        }
+
         $this->availableSize += $element->getLength();
         $element->setValue($value);
         $this->availableSize -= $element->getLength();
@@ -160,8 +166,8 @@ class SmartCache implements ISmartCache{
     protected function freeSpace(){
         $elementToRemove = $this->cacheTail->getPrevious();
         $this->excludeElement($elementToRemove);
-        $this->availableSize += $elementToRemove->getLength();
         unset($this->cache[$elementToRemove->getKey()]);
+        $this->availableSize += $elementToRemove->getLength();
     }
 }
 
@@ -198,10 +204,11 @@ class CacheElement{
         return $this->previous;
     }
 
+
     /**
-     * @param mixed $previous
+     * @param CacheElement $previous
      */
-    public function setPrevious($previous)
+    public function setPrevious(CacheElement $previous)
     {
         $this->previous = $previous;
     }
@@ -214,10 +221,11 @@ class CacheElement{
         return $this->next;
     }
 
+
     /**
-     * @param mixed $next
+     * @param CacheElement $next
      */
-    public function setNext($next)
+    public function setNext(CacheElement $next)
     {
         $this->next = $next;
     }
@@ -272,6 +280,24 @@ class CacheElement{
     }
 }
 
+
+    $cache = new SmartCache();
+    $cache->setMaximumCharactersCount(15);
+
+    $key1 = 'A';
+    $key2 = 'B';
+    $key3 = 'C';
+
+    $data1 = '12345';
+    $data2 = '67890';
+    $data3 = '11111';
+
+    $cache->put($key1, $data1);
+    $cache->put($key2, $data2);
+    $cache->put($key3, $data3);
+
+
+    //var_dump($cache->cacheHead); die();
 
 // Example.
 /*$cache = new SmartCache();
