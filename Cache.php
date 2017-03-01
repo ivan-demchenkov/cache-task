@@ -24,7 +24,7 @@ class SmartCache implements ISmartCache{
     private $cacheTail;
 
     /**
-     * SmartCache constructor. Init doubly linked list to store cache, link head and tail
+     * SmartCache constructor. Init doubly linked list to store cache, links head and tail
      */
     public function __construct()
     {
