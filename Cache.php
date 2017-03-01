@@ -1,4 +1,4 @@
-<?php 
+<?php
 interface ISmartCache
 {
     public function setMaximumCharactersCount(int $maximum);
@@ -7,10 +7,10 @@ interface ISmartCache
 }
 
 class SmartCache implements ISmartCache{
-    
+
     private $maximumSize;
     private $availableSize;
-    
+
     private $cache;
 
     private $cacheHead;
@@ -22,6 +22,8 @@ class SmartCache implements ISmartCache{
     public function __construct()
     {
         $this->cache = [];
+        $this->maximumSize = 0;
+        $this->availableSize = 0;
 
         $this->cacheHead = new CacheElement(null, null);
         $this->cacheTail = new CacheElement(null, null);
@@ -32,25 +34,32 @@ class SmartCache implements ISmartCache{
 
 
     public function setMaximumCharactersCount(int $maximum){
+        if($this->maximumSize != $this->availableSize){
+            throw new Exception('Can\'t change limitation of non empty cache');
+        }
         $this->maximumSize = $maximum;
         $this->availableSize = $maximum;
     }
-    
+
     public function get(string $key): ?string{
         if(!isset($this->cache[$key])){
             return null;
         }
+
         $element = $this->cache[$key];
+        if(count($this->cache) == 1){
+            return $element->getValue();
+        }
 
         $this->excludeElement($element);
         $this->upElement($element);
 
         return $element->getValue();
     }
-    
+
     public function put(string $key, string $value): void{
         $newValueLength = strlen($value);
-        
+
         if($newValueLength > $this->maximumSize){
             throw new Exception('Cache value size more than cache size');
         }
@@ -63,7 +72,7 @@ class SmartCache implements ISmartCache{
             $this->createNew($key, $value);
         }
     }
-    
+
     protected function upElement(CacheElement $cacheElement){
         $cacheElement->setPrevious($this->cacheHead);
         $cacheElement->setNext($this->cacheHead->getNext());
@@ -206,16 +215,17 @@ class CacheElement{
 
 
 // Example.
-$cache = new SmartCache();
+//$cache = new SmartCache();
 
-$cache->setMaximumCharactersCount(16);
+//$cache->setMaximumCharactersCount(15);
 
-$cache->put('A', '1234567890'); // 10 chars im memory
-$cache->put('B', '1234');       // 4 + 10 = 14 chars in memory
-$cache->put('C', '1');          // 4 + 10 + 1= 15 chars in memory
-var_dump($cache->get('A'));     // Will return 1234567890
-$cache->put('D', '567');        // 4 + 10 + 1 + 3= 18 chars > 16, an elements must be deleted
 
+//$cache->put('A', '1234567890'); // 10 chars im memory
+//$cache->put('B', '1234');       // 4 + 10 = 14 chars in memory
+//$cache->put('C', '1');          // 4 + 10 + 1= 15 chars in memory
+//var_dump($cache->get('A'));     // Will return 1234567890
+//$cache->put('D', '567');        // 4 + 10 + 1 + 3= 18 chars > 16, an elements must be deleted
+//$cache->put('E', '5674');
 // Because A was used more recently then B, A will not be removed.
-var_dump($cache->get('B'));     // Will return null
-var_dump($cache->get('A'));     // Will return 1234567890
+//var_dump($cache->get('B'));     // Will return null
+//var_dump($cache->get('A'));     // Will return 1234567890
