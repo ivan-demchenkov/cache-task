@@ -2,7 +2,6 @@
 
 require ('Cache.php');
 
-//error_reporting(0);
 
 class CacheBenchmark{
 
@@ -38,9 +37,8 @@ class CacheBenchmark{
         $new_string = $this->generateRandomString($putElementLength);
 
         $start_time = microtime(TRUE);
-    //    if (session_status() == PHP_SESSION_NONE) {
-            session_start();
-    //    }
+        session_start();
+
         $this->cache->put($new_key, $new_string);
         $end_time = microtime(TRUE);
 
@@ -53,9 +51,8 @@ class CacheBenchmark{
         $test_key = array_rand($this->keys);
 
         $start_time = microtime(TRUE);
-      //  if (session_status() == PHP_SESSION_NONE) {
-            session_start();
-      //  }
+        session_start();
+
         $this->cache->get($test_key);
         $end_time = microtime(TRUE);
 
@@ -92,7 +89,7 @@ class CacheBenchmark{
 $benchmark = new CacheBenchmark();
 $put_result = $benchmark->testPut(15);
 //echo 'put in cache with '.$benchmark->getKeySize().' elements element with 10000 length: '.$put_result.PHP_EOL;
-//echo 'put in cache with '.$benchmark->getKeySize().' elements: '.$put_result.PHP_EOL;
-$benchmark->explodeCache();
+echo 'put in cache with '.$benchmark->getKeySize().' elements: '.$put_result.PHP_EOL;
+
 //$get_result = $benchmark->testGet(2000000);
 //echo 'get from cache with '.$benchmark->getKeySize().' elements: '.$get_result.PHP_EOL;

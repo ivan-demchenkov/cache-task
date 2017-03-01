@@ -274,7 +274,7 @@ class CacheElement{
 
 
 // Example.
-/*$cache = new SmartCache();
+/* $cache = new SmartCache();
 
 $cache->setMaximumCharactersCount(15);
 
