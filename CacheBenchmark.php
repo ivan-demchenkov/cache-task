@@ -83,12 +83,16 @@ class CacheBenchmark{
     public function getKeySize(){
       return sizeof($this->keys);
     }
+
+    public function explodeCache(){
+        var_dump(($this->cache));
+    }
 }
 
 $benchmark = new CacheBenchmark();
-$put_result = $benchmark->testPut(100000, 10000);
-echo 'put in cache with '.$benchmark->getKeySize().' elements element with 10000 length: '.$put_result.PHP_EOL;
+$put_result = $benchmark->testPut(15);
+//echo 'put in cache with '.$benchmark->getKeySize().' elements element with 10000 length: '.$put_result.PHP_EOL;
 //echo 'put in cache with '.$benchmark->getKeySize().' elements: '.$put_result.PHP_EOL;
-
+$benchmark->explodeCache();
 //$get_result = $benchmark->testGet(2000000);
 //echo 'get from cache with '.$benchmark->getKeySize().' elements: '.$get_result.PHP_EOL;
